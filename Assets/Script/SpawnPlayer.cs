@@ -6,11 +6,14 @@ public class SpawnPlayer : EnumManager
 {
     #region INICIALIZE
 
-    public void SetupSpawn(GameObject[] playerObj)
+    public void SetupSpawn(List<GameObject> playerObj)
     {
-        for (int i = 0; i < playerObj.Length; i++)
+        if (GetStateGame() == STATE_GAME.SPAWNPLAYER)
         {
-            Instantiate(playerObj[i], GetRandomLocation(), new Quaternion(0, 0, 0, 0));
+            for (int i = 0; i < playerObj.ToArray().Length; i++)
+            {
+                Instantiate(playerObj[i], GetRandomLocation(), new Quaternion(0, 0, 0, 0));
+            }
         }
     }
 

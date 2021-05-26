@@ -7,6 +7,10 @@ public class GameState : MonoBehaviour
     public enum STATE_GAME
     {
         INITIALIZING, //Carregar todas as infos;
+        ROLLING_DICES,
+        STARTING,
+        CHECKING_DICES,
+        SPAWNPLAYER,
         START_TURN, //Inicia primeiro turno
         RESET_ATRIBUTS,
         LOSE, //DERROTA DO INIMIGO
