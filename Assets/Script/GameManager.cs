@@ -10,14 +10,21 @@ public class GameManager : SpawnPlayer
     public GameObject playerClone;
     private List<GameObject> players = new List<GameObject>();
 
-    [Header("UI-Component")]
+    [Header("Arrays")]
     public Button[] button = new Button[4];
-    public bool btIsReady_1, btIsReady_2, btIsReady_3, btIsReady_4;
-    public Text uiButtonTxt_1, uiButtonTxt_2, uiButtonTxt_3, uiButtonTxt_4;
-    [SerializeField] private int dice_1, dice_2, dice_3, dice_4;
-    public Text diceResult_1, diceResult_2, diceResult_3, diceResult_4;
+    public InputField[] usernameInput = new InputField[4];
+    public Text[] username_txt = new Text[4];
+
+    [Header("UI-Components")]
+    public Text uiButtonTxt_1; 
+    public Text uiButtonTxt_2;
+    public Text uiButtonTxt_3;
+    public Text uiButtonTxt_4;
     public InputField playerCount_Txt;
     public int playerCount;
+    public Text diceResult_1, diceResult_2, diceResult_3, diceResult_4;
+    private int dice_1, dice_2, dice_3, dice_4;
+    private bool btIsReady_1, btIsReady_2, btIsReady_3, btIsReady_4;
     [Header("GameComponents")]
     private bool startCount;
     private float timeToStart;
@@ -57,6 +64,8 @@ public class GameManager : SpawnPlayer
 
         button[2].gameObject.SetActive(false);
         button[3].gameObject.SetActive(false);
+        usernameInput[2].gameObject.SetActive(false);
+        usernameInput[3].gameObject.SetActive(false);
     }
     public int GetPlayerCount()
     {
@@ -87,9 +96,9 @@ public class GameManager : SpawnPlayer
                 case 2:
                     button[2].gameObject.SetActive(false);
                     button[3].gameObject.SetActive(false);
+
                     if (btIsReady_1 == true && btIsReady_2 == true)
                     {
-                        Debug.Log("on - Line 71");
                         SetStateGame(STATE_GAME.ROLLING_DICES);
                         SetupDices(playerCount);
                     }
@@ -97,6 +106,7 @@ public class GameManager : SpawnPlayer
                 case 4:
                     button[2].gameObject.SetActive(true);
                     button[3].gameObject.SetActive(true);
+                    
                     if (btIsReady_1 == true && btIsReady_2 == true && btIsReady_3 == true && btIsReady_4 == true)
                     {
                         SetStateGame(STATE_GAME.ROLLING_DICES);
