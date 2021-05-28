@@ -14,7 +14,7 @@ public class GameManager : SpawnPlayer
     public InputField[] usernameInput = new InputField[4];
     public GameObject[] dontDestroyObjects = new GameObject[2];
     public Text[] username_txt = new Text[4];
-    [SerializeField] private List<GameObject> User = new List<GameObject>();
+    [SerializeField] private List<GameObject> users = new List<GameObject>();
 
     [Header("UI-Components")]
     public Text uiButtonTxt_1;
@@ -152,7 +152,6 @@ public class GameManager : SpawnPlayer
                     diceResult_2.text = dice_2.ToString();
 
                     startCount = true;
-                    CountToStart();
                     break;
                 case 4:
                     dice_1 = Random.Range(0, 21);
@@ -166,7 +165,6 @@ public class GameManager : SpawnPlayer
                     diceResult_4.text = dice_4.ToString();
 
                     startCount = true;
-                    CountToStart();
                     break;
             }
         }
@@ -190,13 +188,14 @@ public class GameManager : SpawnPlayer
                             DontDestroyOnLoad(dontDestroyObjects[i]);
                             SceneController.SceneToGo(sceneTarget);
                             Debug.Log("Loading Users: Count: " + playerCount + " | " + "Indo para cena: " + sceneTarget);
+                            LoadingUsers(playerCount);
+                            SetStateGame(STATE_GAME.SPAWNPLAYER);
                             if (!CooldownManager.IsExpired("ClearLog", "log"))
                             {
                                 return;
                             }
                             CooldownManager.AddCooldown("ClearLog", "log", 2000);
-                            LoadingUsers(playerCount);
-                            ClearLog();
+                            //ClearLog();
                         }
                     }
                 }
@@ -209,37 +208,23 @@ public class GameManager : SpawnPlayer
     }
     public void AddNewUser(int userCount)
     {
-        Debug.Log("Insert players in list -- MENSAGE LINE 213");
-        for (int i = 0; i < userCount; i++)
+        Debug.Log("Insert players in list -- MENSAGE LINE 213" + " | " + userCount);
+        for (int i = 0; i < 4; i++)
         {
-            if (userCount <= 4)
+            if (i <= userCount)
             {
-                User.Add(playerClone);
-                SetupSpawn(User);
-            }
-            else
-            {
-                //verificação caso de errado
-                if (userCount > 4)
-                {
-                    userCount = 4;
-                    foreach (GameObject players in User)
-                    {
-                        User.RemoveAt(4);
-                        for (int j = 0; userCount < User.ToArray().Length; j++)
-                        {
-                            User.Add(playerClone);
-                        }
-
-                    }
-                }
+                users.Add(playerClone);
             }
         }
+        Debug.Log(users.ToArray().Length);
     }
     public void LoadingUsers(int userCount)
     {
         AddNewUser(userCount);
-        SetupSpawn(User);
+        if (GetStateGame() == STATE_GAME.SPAWNPLAYER)
+        {
+            SetupSpawn(users);
+        }
 
     }
     // Update is called once per frame
