@@ -12,7 +12,9 @@ public class SpawnPlayer : EnumManager
         {
             for (int i = 0; i < playerObj.ToArray().Length; i++)
             {
-                Instantiate(playerObj[i], GetRandomLocation(), new Quaternion(0, 0, 0, 0));
+                GameObject[] userArray = playerObj.ToArray();
+                Instantiate(userArray[i], GetRandomLocation(), new Quaternion(0, 0, 0, 0));
+                //userArray[i].transform.position = GetRandomLocation();
             }
         }
     }
