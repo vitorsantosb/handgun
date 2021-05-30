@@ -32,6 +32,8 @@ public class GameManager : SpawnPlayer
     public Text timeToStart_txt;
     [Header("SceneManager")]
     public string sceneTarget;
+    private GameObject managerObj;
+    public Scene targetScene;
 
     void Awake()
     {
@@ -180,49 +182,49 @@ public class GameManager : SpawnPlayer
                 if (timeToStart <= 0)
                 {
                     startCount = false;
-                    SetStateGame(STATE_GAME.CHECKING_DICES);
-                    if (GetStateGame() == STATE_GAME.CHECKING_DICES)
+                    for (int i = 0; i < dontDestroyObjects.Length; i++)
                     {
-                        for (int i = 0; i < dontDestroyObjects.Length; i++)
-                        {
-                            DontDestroyOnLoad(dontDestroyObjects[i]);
-                            SceneController.SceneToGo(sceneTarget);
-                            Debug.Log("Loading Users: Count: " + playerCount + " | " + "Indo para cena: " + sceneTarget);
-                            LoadingUsers(playerCount);
-                            SetStateGame(STATE_GAME.SPAWNPLAYER);
-                            if (!CooldownManager.IsExpired("ClearLog", "log"))
-                            {
-                                return;
-                            }
-                            CooldownManager.AddCooldown("ClearLog", "log", 2000);
-                            //ClearLog();
-                        }
+                        DontDestroyOnLoad(dontDestroyObjects[i]);
+                        SceneController.SceneToGo(sceneTarget);
+                        SetStateGame(STATE_GAME.SPAWNPLAYER);
+                        LoadingUsers(playerCount);
+                        //ClearLog();
                     }
                 }
             }
         }
     }
-    public void CheckDiceResult(int dices)
+    public void CheckDiceResult(int playerCount)
     {
-
+        switch (playerCount)
+        {
+            case 2:
+                if (dice_1 == dice_2)
+                {
+                    
+                }
+                break;
+        }
     }
     public void AddNewUser(int userCount)
     {
         Debug.Log("Insert players in list -- MENSAGE LINE 213" + " | " + userCount);
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i <= 4; i++)
         {
             if (i <= userCount)
             {
                 users.Add(playerClone);
             }
         }
-        Debug.Log(users.ToArray().Length);
     }
     public void LoadingUsers(int userCount)
     {
-        AddNewUser(userCount);
         if (GetStateGame() == STATE_GAME.SPAWNPLAYER)
         {
+            dontDestroyObjects[0].transform.GetChild(0).gameObject.SetActive(false);
+            // -> Desabilitando interface antiga.
+            AddNewUser(userCount);
+            SceneManager.MoveGameObjectToScene(managerObj, targetScene);
             SetupSpawn(users);
         }
 
