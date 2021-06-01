@@ -71,7 +71,7 @@ public class GameManager : SpawnPlayer
     {
         if (GetStateGame() == STATE_GAME.READY_TO_GO)
         {
-            for (int i = 0; i < buttonsList.ToArray().Length; i++)
+            /*for (int i = 0; i < buttonsList.ToArray().Length; i++)
             {
                 if (buttonsList[i].GetComponent<buttonScript>().isReady)
                 {
@@ -84,6 +84,21 @@ public class GameManager : SpawnPlayer
                     uiObj[2].SetActive(false);
                 }
             }
+            */
+            bool ReadyState = true;
+
+            for (int i = 0; i < buttonsList.ToArray().Length; i++)
+            {
+                if (buttonsList[i].GetComponent<buttonScript>().isReady == false)
+                {
+                    ReadyState = false;
+                    break;
+                }
+            }
+
+            uiObj[2].SetActive(ReadyState);
+
+
         }
     }
     public bool startGame;
@@ -96,7 +111,7 @@ public class GameManager : SpawnPlayer
         if (startGame == false)
         {
             SetStateGame(STATE_GAME.READY_TO_GO);
-          
+
         }
     }
     public void CallingDices()
