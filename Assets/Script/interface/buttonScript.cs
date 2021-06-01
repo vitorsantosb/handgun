@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 public class buttonScript : MonoBehaviour
 {
-    public static bool isReady;
+    public bool isReady;
     public Text buttonText;
     public InputField userNameInput;
     private static string userName;
