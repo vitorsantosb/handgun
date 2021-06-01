@@ -13,13 +13,11 @@ public class GameManager : SpawnPlayer
     public int playerCount;
 
     [Header("Arrays and Lists")]
-    public InputField[] usernameInput = new InputField[4];
-    public GameObject[] dontDestroyObjects = new GameObject[2];
-    public Text[] username_txt = new Text[4];
-    private List<User> users = new List<User>();
-    private List<GameObject> buttonsList = new List<GameObject>();
+    public GameObject[] dontDestroyObjects = new GameObject[1];
+    private List<User> userList = new List<User>();
+    public List<GameObject> buttonsList = new List<GameObject>();
     [Header("UI-Components")]
-    public Text playerCount_Txt;
+    public Text amountOfUsers;
     public GameObject uiRef;
 
     void Awake()
@@ -30,7 +28,16 @@ public class GameManager : SpawnPlayer
 
     public int GetPlayerCount()
     {
-        return int.Parse(playerCount_Txt.text);
+        return int.Parse(amountOfUsers.text);
+    }
+    public void ReSizeList()
+    {
+        for (int i = 0; i < buttonsList.ToArray().Length; i++)
+        {
+            Destroy(buttonsList[i]);
+        }
+        buttonsList.Clear();
+        userList.Clear();
     }
     public void ButtonEvent(InputField param)
     {
@@ -41,7 +48,7 @@ public class GameManager : SpawnPlayer
     {
         for (int i = 0; i < playerCount; i++)
         {
-            GameObject button = Instantiate(buttonClone, new Vector3(uiRef.transform.position.x, uiRef.transform.position.y + (i * -40), 0), new Quaternion(0, 0, 0, 0));
+            GameObject button = Instantiate(buttonClone, new Vector3(uiRef.transform.position.x, uiRef.transform.position.y + (i * -65), 0), new Quaternion(0, 0, 0, 0));
             button.transform.SetParent(uiRef.transform);
             buttonsList.Add(button);
         }

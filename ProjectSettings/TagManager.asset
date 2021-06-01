@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - cenario
+  - button
   layers:
   - Default
   - TransparentFX
