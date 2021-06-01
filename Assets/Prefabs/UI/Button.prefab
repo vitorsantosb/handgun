@@ -786,6 +786,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b26f602e10acd6a49a23fd9816827924, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isReady: 0
   buttonText: {fileID: 6103494051724708804}
   userNameInput: {fileID: 6103494053180420162}
   userText: {fileID: 6103494051925474181}
+  diceResult: 0
+  diceResult_txt: {fileID: 6103494052391307607}

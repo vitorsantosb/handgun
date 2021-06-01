@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -24,6 +25,7 @@ public class GameManager : SpawnPlayer
     void Awake()
     {
         SetStateGame(STATE_GAME.INITIALIZING);
+        startGame = false;
     }
 
 
@@ -33,8 +35,10 @@ public class GameManager : SpawnPlayer
     }
     public void ReSizeList()
     {
-        uiObj[1].SetActive(false);
+        SetStateGame(STATE_GAME.INITIALIZING);
         uiObj[0].SetActive(true);
+        uiObj[1].SetActive(false);
+        uiObj[2].SetActive(false);
         for (int i = 0; i < buttonsList.ToArray().Length; i++)
         {
             Destroy(buttonsList[i]);
@@ -60,20 +64,52 @@ public class GameManager : SpawnPlayer
                 buttonsList.Add(button);
                 userList.Add(new User("", 0, i + 1, playerClone));
             }
+            SetStateGame(STATE_GAME.READY_TO_GO);
         }
     }
     public void AllButtonsReady()
     {
-        for (int i = 0; i < buttonsList.ToArray().Length; i++)
+        if (GetStateGame() == STATE_GAME.READY_TO_GO)
         {
-            if (buttonsList[i].GetComponent<buttonScript>().isReady)
+            for (int i = 0; i < buttonsList.ToArray().Length; i++)
             {
-                uiObj[2].SetActive(true);
+                if (buttonsList[i].GetComponent<buttonScript>().isReady)
+                {
+                    Debug.Log("button pressed: " + buttonsList[i].GetComponent<buttonScript>().isReady);
+                    uiObj[2].SetActive(true);
+                }
+                else if (buttonsList[i].GetComponent<buttonScript>().isReady == false)
+                {
+                    Debug.Log("button pressed disable: " + buttonsList[i].GetComponent<buttonScript>().isReady);
+                    uiObj[2].SetActive(false);
+                }
             }
-            else if (buttonsList[i].GetComponent<buttonScript>().isReady == false)
+        }
+    }
+    public bool startGame;
+    public void IsReadyToStart()
+    {
+        Debug.Log("start game is: " + startGame);
+        startGame = true;
+        CallingDices();
+        SetStateGame(STATE_GAME.ROLLING_DICES);
+        if (startGame == false)
+        {
+            SetStateGame(STATE_GAME.READY_TO_GO);
+          
+        }
+    }
+    public void CallingDices()
+    {
+        if (GetStateGame() == STATE_GAME.ROLLING_DICES)
+        {
+
+            for (int i = 0; i < buttonsList.ToArray().Length; i++)
             {
-                uiObj[2].SetActive(false);
+                buttonsList[i].GetComponent<buttonScript>().RollingDice();
+
             }
+
         }
     }
     // Update is called once per frame
