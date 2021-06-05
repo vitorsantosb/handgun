@@ -1,235 +1,128 @@
-﻿using System.Collections;
+﻿using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Reflection;
+using UnityEditor;
 public class GameManager : SpawnPlayer
 {
     [Header("Players")]
     public GameObject playerClone;
+    public GameObject buttonClone;
+    public int playerCount;
 
     [Header("Arrays and Lists")]
-    public Button[] button = new Button[4];
-    public InputField[] usernameInput = new InputField[4];
-    public GameObject[] dontDestroyObjects = new GameObject[2];
-    public Text[] username_txt = new Text[4];
-    [SerializeField] private List<GameObject> users = new List<GameObject>();
-
+    public GameObject[] dontDestroyObjects = new GameObject[1];
+    public GameObject[] uiObj = new GameObject[1];
+    private List<User> userList = new List<User>();
+    public List<GameObject> buttonsList = new List<GameObject>();
     [Header("UI-Components")]
-    public Text uiButtonTxt_1;
-    public Text uiButtonTxt_2;
-    public Text uiButtonTxt_3;
-    public Text uiButtonTxt_4;
-    public InputField playerCount_Txt;
-    public int playerCount;
-    public Text diceResult_1, diceResult_2, diceResult_3, diceResult_4;
-    private int dice_1, dice_2, dice_3, dice_4;
-    private bool btIsReady_1, btIsReady_2, btIsReady_3, btIsReady_4;
-    [Header("GameComponents")]
-    private bool startCount;
-    private float timeToStart;
-    public Text timeToStart_txt;
-    [Header("SceneManager")]
-    public string sceneTarget;
+    public Text amountOfUsers;
+    public GameObject uiRef;
 
     void Awake()
     {
-        startCount = false;
-        timeToStart = 5;
         SetStateGame(STATE_GAME.INITIALIZING);
-        button[0].onClick = new Button.ButtonClickedEvent();
-        button[0].onClick.AddListener(() =>
-        {
-            btIsReady_1 = !btIsReady_1;
-            uiButtonTxt_1.text = btIsReady_1 ? "READY" : "UNREADY";
-        });
-
-        button[1].onClick = new Button.ButtonClickedEvent();
-        button[1].onClick.AddListener(() =>
-        {
-            btIsReady_2 = !btIsReady_2;
-            uiButtonTxt_2.text = btIsReady_2 ? "READY" : "UNREADY";
-        });
-
-        button[2].onClick = new Button.ButtonClickedEvent();
-        button[2].onClick.AddListener(() =>
-        {
-            btIsReady_3 = !btIsReady_3;
-            uiButtonTxt_3.text = btIsReady_3 ? "READY" : "UNREADY";
-        });
-
-        button[3].onClick = new Button.ButtonClickedEvent();
-        button[3].onClick.AddListener(() =>
-        {
-            btIsReady_4 = !btIsReady_4;
-            uiButtonTxt_4.text = btIsReady_4 ? "READY" : "UNREADY";
-        });
-
-        button[2].gameObject.SetActive(false);
-        button[3].gameObject.SetActive(false);
-        usernameInput[2].gameObject.SetActive(false);
-        usernameInput[3].gameObject.SetActive(false);
+        startGame = false;
     }
-    public void ClearLog()
-    {
-        var assembly = Assembly.GetAssembly(typeof(UnityEditor.Editor));
-        var type = assembly.GetType("UnityEditor.LogEntries");
-        var method = type.GetMethod("Clear");
-        method.Invoke(new object(), null);
-    }
+
+
     public int GetPlayerCount()
     {
-        return int.Parse(playerCount_Txt.text);
+        return int.Parse(amountOfUsers.text);
+    }
+    public void ReSizeList()
+    {
+        SetStateGame(STATE_GAME.INITIALIZING);
+        uiObj[0].SetActive(true);
+        uiObj[1].SetActive(false);
+        uiObj[2].SetActive(false);
+        for (int i = 0; i < buttonsList.ToArray().Length; i++)
+        {
+            Destroy(buttonsList[i]);
+        }
+        buttonsList.Clear();
+        userList.Clear();
     }
     public void ButtonEvent(InputField param)
     {
-        param = playerCount_Txt;
-        if (playerCount == 2)
-        {
-            username_txt[0].text = usernameInput[0].text;
-            username_txt[1].text = usernameInput[1].text;
-            SetPlayerCount(param);
-        }
-        else
-        {
-            username_txt[0].text = usernameInput[0].text;
-            username_txt[1].text = usernameInput[1].text;
-            username_txt[2].text = usernameInput[2].text;
-            username_txt[3].text = usernameInput[3].text;
-            SetPlayerCount(param);
-        }
+        this.playerCount = int.Parse(param.text);
+        uiObj[0].SetActive(false);
+        uiObj[1].SetActive(true);
+        CreatNewUser(playerCount);
     }
-    public void SetPlayerCount(InputField playersNumber)
+    public void CreatNewUser(int playerCount)
     {
-        this.playerCount = int.Parse(playersNumber.text);
-        try
+        if (GetStateGame() == STATE_GAME.INITIALIZING)
         {
-            switch (this.playerCount)
+            for (int i = 0; i < playerCount; i++)
             {
-                case 2:
-                    button[2].gameObject.SetActive(false);
-                    button[3].gameObject.SetActive(false);
-
-                    if (btIsReady_1 == true && btIsReady_2 == true)
-                    {
-                        SetStateGame(STATE_GAME.ROLLING_DICES);
-                        SetupDices(playerCount);
-                    }
-                    break;
-                case 4:
-                    button[2].gameObject.SetActive(true);
-                    button[3].gameObject.SetActive(true);
-
-                    usernameInput[2].gameObject.SetActive(true);
-                    usernameInput[3].gameObject.SetActive(true);
-
-                    if (btIsReady_1 == true && btIsReady_2 == true && btIsReady_3 == true && btIsReady_4 == true)
-                    {
-                        SetStateGame(STATE_GAME.ROLLING_DICES);
-                        SetupDices(playerCount);
-                    }
-                    break;
+                GameObject button = Instantiate(buttonClone, new Vector3(uiRef.transform.position.x, uiRef.transform.position.y + (i * -65), 0), new Quaternion(0, 0, 0, 0));
+                button.transform.SetParent(uiRef.transform);
+                buttonsList.Add(button);
+                userList.Add(new User("", 0, i + 1, playerClone));
             }
-        }
-        catch (System.Exception)
-        {
-
+            SetStateGame(STATE_GAME.READY_TO_GO);
         }
     }
-    public void SetupDices(int playerCount)
+    public void AllButtonsReady()
     {
-        Debug.Log("Rolling Dices... - MENSAGE LINE 92");
-        if (GetStateGame() == STATE_GAME.ROLLING_DICES)
+        if (GetStateGame() == STATE_GAME.READY_TO_GO)
         {
-            SetStateGame(STATE_GAME.STARTING);
-            switch (this.playerCount)
+            bool ReadyState = true;
+
+            for (int i = 0; i < buttonsList.ToArray().Length; i++)
             {
-                case 2:
-                    dice_1 = Random.Range(0, 21);
-                    dice_2 = Random.Range(0, 21);
-                    diceResult_1.text = dice_1.ToString();
-                    diceResult_2.text = dice_2.ToString();
-
-                    startCount = true;
-                    break;
-                case 4:
-                    dice_1 = Random.Range(0, 21);
-                    dice_2 = Random.Range(0, 21);
-                    dice_3 = Random.Range(0, 21);
-                    dice_4 = Random.Range(0, 21);
-
-                    diceResult_1.text = dice_1.ToString();
-                    diceResult_2.text = dice_2.ToString();
-                    diceResult_3.text = dice_3.ToString();
-                    diceResult_4.text = dice_4.ToString();
-
-                    startCount = true;
-                    break;
-            }
-        }
-    }
-    public void CountToStart()
-    {
-        if (GetStateGame() == STATE_GAME.STARTING)
-        {
-            if (startCount)
-            {
-                timeToStart -= Time.deltaTime;
-                timeToStart_txt.text = timeToStart.ToString("0");
-                if (timeToStart <= 0)
+                if (buttonsList[i].GetComponent<buttonScript>().isReady == false)
                 {
-                    startCount = false;
-                    SetStateGame(STATE_GAME.CHECKING_DICES);
-                    if (GetStateGame() == STATE_GAME.CHECKING_DICES)
-                    {
-                        for (int i = 0; i < dontDestroyObjects.Length; i++)
-                        {
-                            DontDestroyOnLoad(dontDestroyObjects[i]);
-                            SceneController.SceneToGo(sceneTarget);
-                            Debug.Log("Loading Users: Count: " + playerCount + " | " + "Indo para cena: " + sceneTarget);
-                            LoadingUsers(playerCount);
-                            SetStateGame(STATE_GAME.SPAWNPLAYER);
-                            if (!CooldownManager.IsExpired("ClearLog", "log"))
-                            {
-                                return;
-                            }
-                            CooldownManager.AddCooldown("ClearLog", "log", 2000);
-                            //ClearLog();
-                        }
-                    }
+                    ReadyState = false;
+                    break;
                 }
             }
+
+            uiObj[2].SetActive(ReadyState);
+
+
         }
     }
-    public void CheckDiceResult(int dices)
+    public bool startGame;
+    public void IsReadyToStart()
     {
-
-    }
-    public void AddNewUser(int userCount)
-    {
-        Debug.Log("Insert players in list -- MENSAGE LINE 213" + " | " + userCount);
-        for (int i = 0; i < 4; i++)
+        Debug.Log("start game is: " + startGame);
+        startGame = true;
+        CallingDices();
+        SetStateGame(STATE_GAME.ROLLING_DICES);
+        if (startGame == false)
         {
-            if (i <= userCount)
+            SetStateGame(STATE_GAME.READY_TO_GO);
+
+        }
+    }
+    public void CallingDices()
+    {
+        if (GetStateGame() == STATE_GAME.ROLLING_DICES)
+        {
+
+            for (int i = 0; i < buttonsList.ToArray().Length; i++)
             {
-                users.Add(playerClone);
+                buttonsList[i].GetComponent<buttonScript>().RollingDice();
+                CheckDiceResult();
             }
-        }
-        Debug.Log(users.ToArray().Length);
-    }
-    public void LoadingUsers(int userCount)
-    {
-        AddNewUser(userCount);
-        if (GetStateGame() == STATE_GAME.SPAWNPLAYER)
-        {
-            SetupSpawn(users);
-        }
 
+        }
+    }
+    public void CheckDiceResult()
+    {
+        if (GetStateGame() == STATE_GAME.ROLLING_DICES)
+        {
+            
+        }
     }
     // Update is called once per frame
     void Update()
     {
-        CountToStart();
+        AllButtonsReady();
     }
 }
