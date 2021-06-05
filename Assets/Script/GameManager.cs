@@ -71,20 +71,6 @@ public class GameManager : SpawnPlayer
     {
         if (GetStateGame() == STATE_GAME.READY_TO_GO)
         {
-            /*for (int i = 0; i < buttonsList.ToArray().Length; i++)
-            {
-                if (buttonsList[i].GetComponent<buttonScript>().isReady)
-                {
-                    Debug.Log("button pressed: " + buttonsList[i].GetComponent<buttonScript>().isReady);
-                    uiObj[2].SetActive(true);
-                }
-                else if (buttonsList[i].GetComponent<buttonScript>().isReady == false)
-                {
-                    Debug.Log("button pressed disable: " + buttonsList[i].GetComponent<buttonScript>().isReady);
-                    uiObj[2].SetActive(false);
-                }
-            }
-            */
             bool ReadyState = true;
 
             for (int i = 0; i < buttonsList.ToArray().Length; i++)
@@ -122,9 +108,16 @@ public class GameManager : SpawnPlayer
             for (int i = 0; i < buttonsList.ToArray().Length; i++)
             {
                 buttonsList[i].GetComponent<buttonScript>().RollingDice();
-
+                CheckDiceResult();
             }
 
+        }
+    }
+    public void CheckDiceResult()
+    {
+        if (GetStateGame() == STATE_GAME.ROLLING_DICES)
+        {
+            
         }
     }
     // Update is called once per frame
