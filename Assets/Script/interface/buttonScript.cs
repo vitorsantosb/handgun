@@ -7,7 +7,7 @@ public class buttonScript : MonoBehaviour
     public bool isReady;
     public Text buttonText;
     public InputField userNameInput;
-    private static string userName;
+    private string userName;
     public Text userText;
     public int diceResult;
     public Text diceResult_txt;
@@ -23,7 +23,7 @@ public class buttonScript : MonoBehaviour
         userText.text = userNameInput.text;
         userName = userNameInput.text;
     }
-    public string GetUserName() => userName;
+    public string GetUserName() => this.userName;
     public void RollingDice()
     {
         diceResult = Random.Range(0, 21);

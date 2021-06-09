@@ -104,20 +104,26 @@ public class GameManager : SpawnPlayer
     {
         if (GetStateGame() == STATE_GAME.ROLLING_DICES)
         {
-
             for (int i = 0; i < buttonsList.ToArray().Length; i++)
             {
                 buttonsList[i].GetComponent<buttonScript>().RollingDice();
-                CheckDiceResult();
-            }
 
+            }
+            ChangeUserList();
         }
     }
-    public void CheckDiceResult()
+    public void ChangeUserList()
     {
+
         if (GetStateGame() == STATE_GAME.ROLLING_DICES)
         {
-            
+            for (int i = 0; i < userList.ToArray().Length; i++)
+            {
+                userList[i].SetName(buttonsList[i].GetComponent<buttonScript>().GetUserName());
+                userList[i].SetDice(buttonsList[i].GetComponent<buttonScript>().diceResult);
+            }
+            userList.Sort((a, b) => a.GetDice() < b.GetDice() ? 1 : -1);
+            userList.ForEach(b => Debug.Log("Username: " + b.GetName() + " | " + "DICE RESULT: " + b.GetDice() + " | " + "ID: " + b.GetId()));
         }
     }
     // Update is called once per frame
