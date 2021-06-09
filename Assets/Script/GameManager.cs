@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Security.Cryptography;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -107,7 +108,16 @@ public class GameManager : SpawnPlayer
             for (int i = 0; i < buttonsList.ToArray().Length; i++)
             {
                 buttonsList[i].GetComponent<buttonScript>().RollingDice();
-
+                userList[i].SetDice(buttonsList[i].GetComponent<buttonScript>().diceResult);
+            }
+            int duplicated_dices = userList
+                .GroupBy(d => d.GetDice())
+                .Where(x => x.Count() > 1)
+                .Sum(x => x.Count());
+            Debug.Log("Dados Duplicados: " + duplicated_dices);
+            if (duplicated_dices > 1)
+            {
+                CallingDices();
             }
             ChangeUserList();
         }
@@ -120,7 +130,6 @@ public class GameManager : SpawnPlayer
             for (int i = 0; i < userList.ToArray().Length; i++)
             {
                 userList[i].SetName(buttonsList[i].GetComponent<buttonScript>().GetUserName());
-                userList[i].SetDice(buttonsList[i].GetComponent<buttonScript>().diceResult);
             }
             userList.Sort((a, b) => a.GetDice() < b.GetDice() ? 1 : -1);
             userList.ForEach(b => Debug.Log("Username: " + b.GetName() + " | " + "DICE RESULT: " + b.GetDice() + " | " + "ID: " + b.GetId()));
