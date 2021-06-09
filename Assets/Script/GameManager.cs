@@ -22,11 +22,14 @@ public class GameManager : SpawnPlayer
     [Header("UI-Components")]
     public Text amountOfUsers;
     public GameObject uiRef;
-
+    [Header("GameVars")]
+    public bool isReady;
+    private bool startGame;
+    public Text TimeToStart_txt;
+    private float timeToStart = 5;
     void Awake()
     {
         SetStateGame(STATE_GAME.INITIALIZING);
-        startGame = false;
     }
 
 
@@ -37,6 +40,7 @@ public class GameManager : SpawnPlayer
     public void ReSizeList()
     {
         SetStateGame(STATE_GAME.INITIALIZING);
+        ConsolerClear.ClearLog();
         uiObj[0].SetActive(true);
         uiObj[1].SetActive(false);
         uiObj[2].SetActive(false);
@@ -88,19 +92,6 @@ public class GameManager : SpawnPlayer
 
         }
     }
-    public bool startGame;
-    public void IsReadyToStart()
-    {
-        Debug.Log("start game is: " + startGame);
-        startGame = true;
-        CallingDices();
-        SetStateGame(STATE_GAME.ROLLING_DICES);
-        if (startGame == false)
-        {
-            SetStateGame(STATE_GAME.READY_TO_GO);
-
-        }
-    }
     public void CallingDices()
     {
         if (GetStateGame() == STATE_GAME.ROLLING_DICES)
@@ -119,13 +110,13 @@ public class GameManager : SpawnPlayer
             {
                 CallingDices();
             }
+            SetStateGame(STATE_GAME.CHANGE_USER_INFO);
             ChangeUserList();
         }
     }
     public void ChangeUserList()
     {
-
-        if (GetStateGame() == STATE_GAME.ROLLING_DICES)
+        if (GetStateGame() == STATE_GAME.CHANGE_USER_INFO)
         {
             for (int i = 0; i < userList.ToArray().Length; i++)
             {
@@ -133,11 +124,55 @@ public class GameManager : SpawnPlayer
             }
             userList.Sort((a, b) => a.GetDice() < b.GetDice() ? 1 : -1);
             userList.ForEach(b => Debug.Log("Username: " + b.GetName() + " | " + "DICE RESULT: " + b.GetDice() + " | " + "ID: " + b.GetId()));
+            SetStateGame(STATE_GAME.STARTING);
+            if (GetStateGame() == STATE_GAME.STARTING)
+            {
+                uiObj[0].SetActive(false);
+                uiObj[1].SetActive(false);
+                isReady = true;
+                CountToInicialize();
+            }
+
+        }
+    }
+    public void IsReadyToStart()
+    {
+        startGame = true;
+        Debug.Log("startGame value: " + startGame);
+        CallingDices();
+        SetStateGame(STATE_GAME.ROLLING_DICES);
+
+        if (startGame == false)
+        {
+            SetStateGame(STATE_GAME.READY_TO_GO);
+        }
+    }
+    public void CountToInicialize()
+    {
+        if (isReady)
+        {
+            Debug.Log("Função ON - MENSAGE LINE - 152");
+            timeToStart -= Time.deltaTime;
+            TimeToStart_txt.text = timeToStart.ToString("0");
+            if (timeToStart <= 0)
+            {
+                isReady = false;
+                DontDestroyOnLoad(dontDestroyObjects[0]);
+                SceneController.SceneToGo("CenaTeste");
+            }
+        }
+    }
+    public void InicializeTurn()
+    {
+        for (int i = 0; i < userList.ToArray().Length; i++)
+        {
+
         }
     }
     // Update is called once per frame
     void Update()
     {
+        CountToInicialize();
         AllButtonsReady();
     }
 }
