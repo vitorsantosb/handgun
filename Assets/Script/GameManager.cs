@@ -123,7 +123,7 @@ public class GameManager : SpawnPlayer
                 userList[i].SetName(buttonsList[i].GetComponent<buttonScript>().GetUserName());
             }
             userList.Sort((a, b) => a.GetDice() < b.GetDice() ? 1 : -1);
-            userList.ForEach(b => Debug.Log("Username: " + b.GetName() + " | " + "DICE RESULT: " + b.GetDice() + " | " + "ID: " + b.GetId()));
+            userList.ForEach(b => Debug.Log("Username: " + b.GetName() + " | " + "DICE RESULT: " + b.GetDice() + " | " + "ID: " + b.GetId() + " | " + b.GetUserObject()));
             SetStateGame(STATE_GAME.STARTING);
             if (GetStateGame() == STATE_GAME.STARTING)
             {
@@ -132,7 +132,7 @@ public class GameManager : SpawnPlayer
                 isReady = true;
                 CountToInicialize();
             }
-
+            //ConsolerClear.ClearLog();
         }
     }
     public void IsReadyToStart()
@@ -144,6 +144,7 @@ public class GameManager : SpawnPlayer
 
         if (startGame == false)
         {
+
             SetStateGame(STATE_GAME.READY_TO_GO);
         }
     }
@@ -157,16 +158,23 @@ public class GameManager : SpawnPlayer
             if (timeToStart <= 0)
             {
                 isReady = false;
-                DontDestroyOnLoad(dontDestroyObjects[0]);
-                SceneController.SceneToGo("CenaTeste");
+                for (int i = 0; i < dontDestroyObjects.Length; i++)
+                {
+                    DontDestroyOnLoad(dontDestroyObjects[i]);
+                }
+                dontDestroyObjects[1].gameObject.SetActive(false);
+                SceneController.SceneToGo("GameScene");
+                SetStateGame(STATE_GAME.SPAWNPLAYER);
+                InicializeTurn();
             }
         }
     }
     public void InicializeTurn()
     {
-        for (int i = 0; i < userList.ToArray().Length; i++)
+        if (GetStateGame() == STATE_GAME.SPAWNPLAYER)
         {
-
+            SetupSpawn(userList);
+            Debug.Log("Function on - MENSAGE LINE 171");
         }
     }
     // Update is called once per frame

@@ -627,7 +627,7 @@ MonoBehaviour:
   playerCount: 0
   dontDestroyObjects:
   - {fileID: 796177870}
-  - {fileID: 0}
+  - {fileID: 1802215492}
   uiObj:
   - {fileID: 578094319}
   - {fileID: 1424434072}
