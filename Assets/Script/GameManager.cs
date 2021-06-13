@@ -15,7 +15,6 @@ public class GameManager : SpawnPlayer
     public int playerCount;
 
     [Header("Arrays and Lists")]
-    public GameObject[] dontDestroyObjects = new GameObject[1];
     public GameObject[] uiObj = new GameObject[1];
     private List<User> userList = new List<User>();
     public List<GameObject> buttonsList = new List<GameObject>();
@@ -44,7 +43,7 @@ public class GameManager : SpawnPlayer
         uiObj[0].SetActive(true);
         uiObj[1].SetActive(false);
         uiObj[2].SetActive(false);
-        for (int i = 0; i < buttonsList.ToArray().Length; i++)
+        for (int i = 0; i < buttonsList.Count; i++)
         {
             Destroy(buttonsList[i]);
         }
@@ -96,7 +95,7 @@ public class GameManager : SpawnPlayer
     {
         if (GetStateGame() == STATE_GAME.ROLLING_DICES)
         {
-            for (int i = 0; i < buttonsList.ToArray().Length; i++)
+            for (int i = 0; i < buttonsList.Count; i++)
             {
                 buttonsList[i].GetComponent<buttonScript>().RollingDice();
                 userList[i].SetDice(buttonsList[i].GetComponent<buttonScript>().diceResult);
@@ -118,7 +117,7 @@ public class GameManager : SpawnPlayer
     {
         if (GetStateGame() == STATE_GAME.CHANGE_USER_INFO)
         {
-            for (int i = 0; i < userList.ToArray().Length; i++)
+            for (int i = 0; i < userList.Count; i++)
             {
                 userList[i].SetName(buttonsList[i].GetComponent<buttonScript>().GetUserName());
             }
@@ -158,15 +157,9 @@ public class GameManager : SpawnPlayer
             if (timeToStart <= 0)
             {
                 isReady = false;
-                for (int i = 0; i < dontDestroyObjects.Length; i++)
-                {
-                    DontDestroyOnLoad(dontDestroyObjects[i]);
-                }
-                dontDestroyObjects[1].gameObject.SetActive(false);
-                SceneController.SceneToGo("GameScene");
                 SetStateGame(STATE_GAME.SPAWNPLAYER);
-                InicializeTurn();
             }
+            InicializeTurn();
         }
     }
     public void InicializeTurn()

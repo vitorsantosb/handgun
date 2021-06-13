@@ -10,9 +10,11 @@ public class SpawnPlayer : EnumManager
     {
         if (GetStateGame() == STATE_GAME.SPAWNPLAYER)
         {
-            for (int i = 0; i < playerObj.ToArray().Length; i++)
+            for (int i = 0; i < playerObj.Count; i++)
             {
-                Instantiate(playerObj[i].GetUserObject(), GetRandomLocation(), new Quaternion(0, 0, 0, 0));
+                GameObject novoObj = Instantiate(playerObj[i].GetUserObject(), GetRandomLocation(), new Quaternion(0, 0, 0, 0));
+                Debug.Log(novoObj);
+                Debug.Break();
             }
         }
 
