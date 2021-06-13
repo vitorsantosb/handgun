@@ -6,26 +6,27 @@ public class SpawnPlayer : EnumManager
 {
     #region INICIALIZE
 
-    public void SetupSpawn(List<GameObject> playerObj)
+    public void SetupSpawn(List<User> playerObj)
     {
         if (GetStateGame() == STATE_GAME.SPAWNPLAYER)
         {
-            for (int i = 0; i < playerObj.ToArray().Length; i++)
+            for (int i = 0; i < playerObj.Count; i++)
             {
-                GameObject[] userArray = playerObj.ToArray();
-                Instantiate(userArray[i], GetRandomLocation(), new Quaternion(0, 0, 0, 0));
-                //userArray[i].transform.position = GetRandomLocation();
+                GameObject novoObj = Instantiate(playerObj[i].GetUserObject(), GetRandomLocation(), new Quaternion(0, 0, 0, 0));
+                Debug.Log(novoObj);
+                Debug.Break();
             }
         }
+
     }
 
     public Vector3 GetRandomLocation()
     {
-        int _x = 473;
-        int _y = 25;
-        int _z = 510;
+        int _x = 0;
+        int _y = 0;
+        int _z = 0;
 
-        int raio = 320;
+        int raio = 360;
 
         int x = Random.Range(-raio, +raio);
         int z = Random.Range(-raio, +raio);
@@ -56,13 +57,13 @@ public class SpawnPlayer : EnumManager
     {
         List<GameObject> objects = new List<GameObject>();
 
-        GameObject[] cenario = GameObject.FindGameObjectsWithTag("Cenario");
+        GameObject[] cenario = GameObject.FindGameObjectsWithTag("cenario");
         for (int i = 0; i < cenario.Length; i++)
         {
             objects.Add(cenario[i]);
         }
 
-        objects.Add(GameObject.FindGameObjectWithTag("Player"));
+        //objects.Add(GameObject.FindGameObjectWithTag("Player"));
 
         List<GameObject> nearby = new List<GameObject>();
 

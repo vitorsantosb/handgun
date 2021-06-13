@@ -9,6 +9,7 @@ public class GameState : MonoBehaviour
         INITIALIZING,
         READY_TO_GO,
         ROLLING_DICES,
+        CHANGE_USER_INFO,
         STARTING,
         CHECKING_DICES,
         SPAWNPLAYER,
