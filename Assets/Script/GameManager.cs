@@ -123,7 +123,9 @@ public class GameManager : SpawnPlayer
             }
             userList.Sort((a, b) => a.GetDice() < b.GetDice() ? 1 : -1);
             userList.ForEach(b => Debug.Log("Username: " + b.GetName() + " | " + "DICE RESULT: " + b.GetDice() + " | " + "ID: " + b.GetId() + " | " + b.GetUserObject()));
+
             SetStateGame(STATE_GAME.STARTING);
+
             if (GetStateGame() == STATE_GAME.STARTING)
             {
                 uiObj[0].SetActive(false);
@@ -151,7 +153,6 @@ public class GameManager : SpawnPlayer
     {
         if (isReady)
         {
-            Debug.Log("Função ON - MENSAGE LINE - 152");
             timeToStart -= Time.deltaTime;
             TimeToStart_txt.text = timeToStart.ToString("0");
             if (timeToStart <= 0)
@@ -159,6 +160,7 @@ public class GameManager : SpawnPlayer
                 isReady = false;
                 SetStateGame(STATE_GAME.SPAWNPLAYER);
             }
+            ConsolerClear.ClearLog();
             InicializeTurn();
         }
     }
@@ -167,8 +169,33 @@ public class GameManager : SpawnPlayer
         if (GetStateGame() == STATE_GAME.SPAWNPLAYER)
         {
             SetupSpawn(userList);
-            Debug.Log("Function on - MENSAGE LINE 171");
+            
+            UpdateUserList();
+            userList.ForEach(b => Debug.Log("Username: " + b.GetName() + " | " + "DICE RESULT: " + b.GetDice() + " | " + "ID: " + b.GetId() + " | " + b.GetUserObject()));
+            
+            var actuallyPlayer = userList.FirstOrDefault<User>();
+            
+            Debug.Log("O primeiro jogador a jogar: " + actuallyPlayer.GetName() + "| Com resultado de: " + actuallyPlayer.GetDice());
         }
+    }
+
+    public void UpdateUserList()
+    {
+        GameObject[] playerInScene = GameObject.FindGameObjectsWithTag("Player");
+        
+        //Realizando Update na lista
+
+        for (int index = 0; index < userList.Count; index++)
+        {
+            userList[index].SetUserObject(playerInScene[index]); 
+        }
+        userList.ForEach(b => Debug.Log("PlayerName: " + b.GetName() + " Objeto atual " + b.GetUserObject()));
+    }
+    public void FirstTurn(){
+
+    }
+    public void NextTurn(){
+
     }
     // Update is called once per frame
     void Update()
