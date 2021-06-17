@@ -13,8 +13,6 @@ public class SpawnPlayer : EnumManager
             for (int i = 0; i < playerObj.Count; i++)
             {
                 GameObject novoObj = Instantiate(playerObj[i].GetUserObject(), GetRandomLocation(), new Quaternion(0, 0, 0, 0));
-                Debug.Log(novoObj);
-                Debug.Break();
             }
         }
 
