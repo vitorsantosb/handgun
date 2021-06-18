@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerCore : MonoBehaviour
 {
-    private int life = 10;
+    public int life = 10;
 
     void Start()
     {
