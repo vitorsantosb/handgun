@@ -337,7 +337,7 @@ GameObject:
   - component: {fileID: 695649911258562483}
   - component: {fileID: 695649911258562477}
   m_Layer: 0
-  m_Name: CM FreeLook1
+  m_Name: cam
   m_TagString: cam
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

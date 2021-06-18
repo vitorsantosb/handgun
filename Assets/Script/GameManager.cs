@@ -298,7 +298,9 @@ public class GameManager : SpawnPlayer
         if (objUser == null) return;
         objUser.GetComponent<Aim>().enabled = active;
         objUser.GetComponent<Movement>().enabled = active;
-        //PEGAR CAMERA DO JOGADOR E HABILIDADE CAMERA
+        objUser.transform.FindChild("cam").gameObject.SetActive(active);
+
+
     }
 
     public void NextTurn(int index)
