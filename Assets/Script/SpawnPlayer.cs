@@ -20,16 +20,16 @@ public class SpawnPlayer : EnumManager
 
     public Vector3 GetRandomLocation()
     {
-        int _x = 0;
-        int _y = 0;
-        int _z = 0;
+        int _x = 76;
+        int _y = 10;
+        int _z = 76;
 
-        int raio = 360;
+        int raio = 320;
 
         int x = Random.Range(-raio, +raio);
         int z = Random.Range(-raio, +raio);
 
-        Vector3 vector = new Vector3(_x + x, _y, _z + z);
+        Vector3 vector = new Vector3(_x + x, _y + 10, _z + z);
 
         if (!IsSafeLocation(vector))
         {
@@ -56,12 +56,14 @@ public class SpawnPlayer : EnumManager
         List<GameObject> objects = new List<GameObject>();
 
         GameObject[] cenario = GameObject.FindGameObjectsWithTag("cenario");
+        cenario = GameObject.FindGameObjectsWithTag("Cenario");
+
         for (int i = 0; i < cenario.Length; i++)
         {
             objects.Add(cenario[i]);
         }
 
-        //objects.Add(GameObject.FindGameObjectWithTag("Player"));
+        objects.Add(GameObject.FindGameObjectWithTag("Player"));
 
         List<GameObject> nearby = new List<GameObject>();
 

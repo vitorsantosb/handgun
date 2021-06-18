@@ -29,17 +29,16 @@ public class GameManager : SpawnPlayer
     public Text TimeToStart_txt;
     private float timeToStart;
     public GameObject currentUser;
+    public int currentUserID;
 
     [Header("Turn vars")]
     private float turnTimer;
-    private int currentPlayerInGame;
     public bool startTurn;
     void Awake()
     {
         SetStateGame(STATE_GAME.INITIALIZING);
         this.timeToStart = 5;
         this.turnTimer = 0;
-        this.currentPlayerInGame = 0;
     }
 
 
@@ -186,13 +185,14 @@ public class GameManager : SpawnPlayer
 
             var actuallyPlayer = userList.FirstOrDefault<User>();
             this.currentUser = actuallyPlayer.GetUserObject();
+            this.currentUserID = actuallyPlayer.GetId();
 
             CanvasList[0].SetActive(false);
 
             SetStateGame(STATE_GAME.START_TURN);
 
             InicializeRound(this.currentUser);
-            Debug.Log("O jogador atual: " + actuallyPlayer.GetName() + "| Com resultado de: " + actuallyPlayer.GetDice() + "index: " + currentPlayerInGame);
+            Debug.Log("O primeiro jogador a jogar: " + actuallyPlayer.GetName() + "| Com resultado de: " + actuallyPlayer.GetDice());
         }
     }
 
@@ -215,10 +215,7 @@ public class GameManager : SpawnPlayer
         {
             startTurn = true;
             this.turnTimer = 15;
-            _currentPlayer.GetComponent<Movement>().enabled = true;
-            _currentPlayer.GetComponent<Aim>().enabled = true;
-            _currentPlayer.GetComponent<PlayerCore>().enabled = true;
-
+            SetUserMove(_currentPlayer, true);
             TurnCount();
         }
     }
@@ -235,90 +232,80 @@ public class GameManager : SpawnPlayer
             }
         }
     }
-    public GameObject currentUserInScene;
     public void EndTurn()
     {
-        this.currentPlayerInGame++;
-        Debug.Log(this.currentPlayerInGame);
-        SetStateGame(STATE_GAME.CHECK_PLAYER_DOWN);
 
-        if (GetStateGame() == STATE_GAME.CHECK_PLAYER_DOWN)
+        if (userList.FindAll(u => u.GetUserObject() != null).Count <= 1)
         {
-            foreach (var p in userList)
-            {
-                if (currentPlayerInGame == p.GetId())
-                {
-                    currentUserInScene = p.GetUserObject();
-                }
-                else if (currentUserInScene == null)
-                {
-                    userList.Skip(this.currentPlayerInGame);
-                    ChangePlayerAfterDead(this.currentPlayerInGame);
-
-                    SetStateGame(STATE_GAME.NEXT_ROUND);
-                    NextTurn(this.currentPlayerInGame);
-
-
-                }
-                else if (currentUserInScene.GetComponent<PlayerCore>().GetLife() > 0)
-                {
-                    Debug.Log("Player Alive - " + p.GetName() + " Seu ID: " + p.GetId() + " - MENSAGE LINE 261");
-                    SetStateGame(STATE_GAME.NEXT_ROUND);
-                    NextTurn(this.currentPlayerInGame);
-                }
-            }
-
-
+            FinalTurn();
+            return;
         }
 
+        SetUserMove(this.currentUser, false);
+
+        bool found = false;
+        bool next = false;
+        for (int i = 0; i < userList.Count; i++)
+        {
+            var p = userList[i];
+
+            if (next && p.GetUserObject() != null)
+            {
+                found = true;
+
+                currentUserID = p.GetId();
+                currentUser = p.GetUserObject();
+
+                SetStateGame(STATE_GAME.NEXT_ROUND);
+                NextTurn(i);
+                break;
+            }
+
+            if (p.GetId() == this.currentUserID)
+            {
+                next = true;
+            }
+        }
+
+        if (!found)
+        {
+            for (int i = 0; i < userList.Count; i++)
+            {
+                var p = userList[i];
+                if (p.GetUserObject() != null)
+                {
+                    currentUserID = p.GetId();
+                    currentUser = p.GetUserObject();
+
+                    SetStateGame(STATE_GAME.NEXT_ROUND);
+                    NextTurn(i);
+                    break;
+                }
+            }
+        }
     }
-    public void ChangePlayerAfterDead(int indexToGo)
+    public void SetUserMove(GameObject objUser, bool active)
     {
-        indexToGo++;
-        currentPlayerInGame = indexToGo;
-        for (int index = 0; index < userList.Count; index++)
-        {
-            if (indexToGo == userList.Count)
-            {
-                indexToGo++;
-                Debug.Log("List size limit");
-            }
-            currentUserInScene = userList[indexToGo].GetUserObject();
-        }
+        if (objUser == null) return;
+        objUser.GetComponent<Aim>().enabled = active;
+        objUser.GetComponent<Movement>().enabled = active;
     }
+
     public void NextTurn(int index)
     {
 
         if (GetStateGame() == STATE_GAME.NEXT_ROUND)
         {
-            currentUser.GetComponent<PlayerCore>().enabled = false;
-            currentUser.GetComponent<Aim>().enabled = false;
-            currentUser.GetComponent<Movement>().enabled = false;
+            SetUserMove(currentUser, true);
             turnTimer = 15;
-            for (int i = 0; i < userList.Count; i++)
-            {
-                if (currentPlayerInGame == i)
-                {
-                    currentUser = userList[index].GetUserObject();
-                }
-            }
-            if (index == userList.Count)
-            {
-                SetStateGame(STATE_GAME.END_ROUND);
-                FinalTurn();
 
-            }
             SetStateGame(STATE_GAME.START_TURN);
             InicializeRound(currentUser);
         }
     }
     public void FinalTurn()
     {
-        if (GetStateGame() == STATE_GAME.END_ROUND)
-        {
-            Debug.Log("FINAL TURN - NEED UPDATE GAME VARS");
-            Debug.Break();
-        }
+        Debug.Log("Final Turn");
     }
     // Update is called once per frame
     void Update()

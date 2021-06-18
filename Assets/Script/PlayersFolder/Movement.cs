@@ -6,11 +6,13 @@ public class Movement : MonoBehaviour
 {
     [SerializeField] private Rigidbody rigidPlayer;
     private float forceMult;
+    [SerializeField] private Animator animator;
 
     void Awake()
     {
         this.rigidPlayer = GetComponent<Rigidbody>();
         this.forceMult = 30;
+        this.animator = GetComponent<Animator>();
     }
 
     void Start()
@@ -32,6 +34,8 @@ public class Movement : MonoBehaviour
         {
             return;
         }
-        rigidPlayer.velocity = transform.forward * moveV * forceMult + transform.right * moveH * forceMult;
+        animator.SetFloat("Blend X", moveH);
+        animator.SetFloat("Blend Y", moveV);
+        rigidPlayer.velocity = transform.forward * moveV * forceMult + transform.right * moveH * forceMult;        
     }
 }
