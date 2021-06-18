@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class SpawnPlayer : EnumManager
 {
     #region INICIALIZE
@@ -20,9 +19,9 @@ public class SpawnPlayer : EnumManager
 
     public Vector3 GetRandomLocation()
     {
-        int _x = 76;
+        int _x = 0;
         int _y = 10;
-        int _z = 76;
+        int _z = 0;
 
         int raio = 120;
 

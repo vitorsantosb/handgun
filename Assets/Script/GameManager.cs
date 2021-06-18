@@ -76,7 +76,7 @@ public class GameManager : SpawnPlayer
         {
             for (int i = 0; i < playerCount; i++)
             {
-                GameObject button = Instantiate(buttonClone, new Vector3(uiRef.transform.position.x, uiRef.transform.position.y + (i * -65), 0), new Quaternion(0, 0, 0, 0));
+                GameObject button = Instantiate(buttonClone, new Vector3(uiRef.transform.position.x, uiRef.transform.position.y + (i * -80), 0), new Quaternion(0, 0, 0, 0));
                 button.transform.SetParent(uiRef.transform);
                 buttonsList.Add(button);
                 userList.Add(new User("", 0, i + 1, playerClone));
@@ -298,7 +298,7 @@ public class GameManager : SpawnPlayer
         if (objUser == null) return;
         objUser.GetComponent<Aim>().enabled = active;
         objUser.GetComponent<Movement>().enabled = active;
-
+        //PEGAR CAMERA DO JOGADOR E HABILIDADE CAMERA
     }
 
     public void NextTurn(int index)
@@ -321,7 +321,7 @@ public class GameManager : SpawnPlayer
         // tu ta com 2 monitor? n
         // ata k por isso não to vendo outro k
 
-        Debug.Log("Final Turn, winner: " + user.GetId());
+        Debug.Log("Final Turn, winner: " + user.GetId() + " | " + user.GetName());
     }
     // Update is called once per frame
     void Update()
@@ -330,4 +330,5 @@ public class GameManager : SpawnPlayer
         TurnCount();
         AllButtonsReady();
     }
+    
 }
