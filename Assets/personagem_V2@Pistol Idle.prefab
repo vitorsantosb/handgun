@@ -338,11 +338,11 @@ GameObject:
   - component: {fileID: 695649911258562477}
   m_Layer: 0
   m_Name: CM FreeLook1
-  m_TagString: Untagged
+  m_TagString: cam
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &695649911258562482
 Transform:
   m_ObjectHideFlags: 0
@@ -707,7 +707,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 695649911492312317}
   m_LocalRotation: {x: -0.0071307155, y: -0.12620309, z: -0.0009071954, w: 0.9919784}
-  m_LocalPosition: {x: 0, y: 0.00000064716414, z: 0}
+  m_LocalPosition: {x: 0, y: 0.00000027735607, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 695649912839706991}
@@ -1984,6 +1984,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1135113892801183284}
   - component: {fileID: 5563791699514437260}
+  - component: {fileID: 9212997780816218155}
   m_Layer: 0
   m_Name: mixamorig:Spine1
   m_TagString: Untagged
@@ -2030,6 +2031,20 @@ AimConstraint:
   m_Sources:
   - sourceTransform: {fileID: 0}
     weight: 1
+--- !u!114 &9212997780816218155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5563791699514437261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82f6fbeb8af65024fa9ebcb0768257b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  camObj: {fileID: 0}
+  thisPlayer: {fileID: 750558159677772661}
 --- !u!1 &5619135585556142714
 GameObject:
   m_ObjectHideFlags: 0

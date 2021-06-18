@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Reflection;
 using UnityEditor;
+
 public class GameManager : SpawnPlayer
 {
     [Header("Players")]
@@ -34,10 +35,12 @@ public class GameManager : SpawnPlayer
     [Header("Turn vars")]
     private float turnTimer;
     public bool startTurn;
+    public int currentTurn;
     void Awake()
     {
         SetStateGame(STATE_GAME.INITIALIZING);
         this.timeToStart = 5;
+        this.currentTurn = 0;
         this.turnTimer = 0;
     }
 
@@ -235,9 +238,11 @@ public class GameManager : SpawnPlayer
     public void EndTurn()
     {
 
-        if (userList.FindAll(u => u.GetUserObject() != null).Count <= 1)
+        List<User> alive = userList.FindAll(u => u.GetUserObject() != null);
+        if (alive.Count <= 1)
         {
-            FinalTurn();
+            User theLastOne = alive[0];
+            FinalTurn(theLastOne);
             return;
         }
 
@@ -266,9 +271,13 @@ public class GameManager : SpawnPlayer
                 next = true;
             }
         }
-
         if (!found)
         {
+            this.currentTurn++;
+            UI_manager[1].text = currentTurn.ToString("0");
+            // pronto 0-0
+            // e n precisa disso aqui n ?
+
             for (int i = 0; i < userList.Count; i++)
             {
                 var p = userList[i];
@@ -289,6 +298,7 @@ public class GameManager : SpawnPlayer
         if (objUser == null) return;
         objUser.GetComponent<Aim>().enabled = active;
         objUser.GetComponent<Movement>().enabled = active;
+
     }
 
     public void NextTurn(int index)
@@ -303,9 +313,15 @@ public class GameManager : SpawnPlayer
             InicializeRound(currentUser);
         }
     }
-    public void FinalTurn()
+    public void FinalTurn(User user)
     {
-        Debug.Log("Final Turn");
+        // user = winner
+        // show
+        //testa aqui;
+        // tu ta com 2 monitor? n
+        // ata k por isso não to vendo outro k
+
+        Debug.Log("Final Turn, winner: " + user.GetId());
     }
     // Update is called once per frame
     void Update()

@@ -6,6 +6,10 @@ TagManager:
   tags:
   - cenario
   - button
+  - Cenario
+  - cuboNaCabeca
+  - camSpine
+  - cam
   layers:
   - Default
   - TransparentFX

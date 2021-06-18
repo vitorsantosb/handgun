@@ -38,13 +38,13 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 888985413}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.2971014, g: 0.63383573, b: 0.9937113, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 11
-  m_GIWorkflowMode: 1
+  m_GIWorkflowMode: 0
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -1340,7 +1340,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &19961434
 PrefabInstance:
@@ -5110,7 +5110,7 @@ Transform:
   - {fileID: 175329925}
   - {fileID: 1790472569}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &98749145
 PrefabInstance:
@@ -9726,7 +9726,7 @@ PrefabInstance:
     - target: {fileID: 7369187729844593396, guid: 2ba863e6132b66f4f8ff8b94cb155b6d,
         type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7369187729844593396, guid: 2ba863e6132b66f4f8ff8b94cb155b6d,
         type: 3}
@@ -15788,7 +15788,7 @@ Transform:
   - {fileID: 396905557}
   - {fileID: 2068304886}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &306546679
 PrefabInstance:
@@ -23796,7 +23796,7 @@ GameObject:
   - component: {fileID: 487995455}
   m_Layer: 0
   m_Name: miraaqui
-  m_TagString: Untagged
+  m_TagString: camSpine
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -54027,7 +54027,7 @@ PrefabInstance:
     - target: {fileID: 5281828825053047457, guid: 9dd4e842578138e4fbb20d8a4fc9d110,
         type: 3}
       propertyPath: m_RootOrder
-      value: 10
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 5281828825053047457, guid: 9dd4e842578138e4fbb20d8a4fc9d110,
         type: 3}
@@ -62332,7 +62332,7 @@ PrefabInstance:
     - target: {fileID: 7369187729844593396, guid: 2ba863e6132b66f4f8ff8b94cb155b6d,
         type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7369187729844593396, guid: 2ba863e6132b66f4f8ff8b94cb155b6d,
         type: 3}
@@ -67302,8 +67302,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1457966618}
-  m_LocalRotation: {x: 0.15849881, y: -0.07219269, z: 0.011612784, w: 0.984648}
-  m_LocalPosition: {x: 393.60645, y: 33.03833, z: 243.26266}
+  m_LocalRotation: {x: -0.030571789, y: -0.12614472, z: -0.0038894012, w: 0.99153304}
+  m_LocalPosition: {x: -107.763016, y: 152.4785, z: 709.7607}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 487995455}
@@ -76686,7 +76686,7 @@ Transform:
   m_LocalScale: {x: 508.42557, y: 129.66132, z: 26.706343}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: -46.881, z: 0}
 --- !u!1001 &1673674903
 PrefabInstance:

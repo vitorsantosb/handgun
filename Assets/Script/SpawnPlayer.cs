@@ -24,7 +24,7 @@ public class SpawnPlayer : EnumManager
         int _y = 10;
         int _z = 76;
 
-        int raio = 320;
+        int raio = 120;
 
         int x = Random.Range(-raio, +raio);
         int z = Random.Range(-raio, +raio);
