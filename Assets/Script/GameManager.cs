@@ -192,7 +192,7 @@ public class GameManager : SpawnPlayer
             SetStateGame(STATE_GAME.START_TURN);
 
             InicializeRound(this.currentUser);
-            Debug.Log("O primeiro jogador a jogar: " + actuallyPlayer.GetName() + "| Com resultado de: " + actuallyPlayer.GetDice());
+            Debug.Log("O jogador atual: " + actuallyPlayer.GetName() + "| Com resultado de: " + actuallyPlayer.GetDice() + "index: " + currentPlayerInGame);
         }
     }
 
@@ -249,25 +249,25 @@ public class GameManager : SpawnPlayer
                 if (currentPlayerInGame == p.GetId())
                 {
                     currentUserInScene = p.GetUserObject();
+                }
+                else if (currentUserInScene == null)
+                {
+                    userList.Skip(this.currentPlayerInGame);
+                    ChangePlayerAfterDead(this.currentPlayerInGame);
 
-                    if (currentUserInScene == null)
-                    {
-                        userList.Skip(this.currentPlayerInGame);
-                        ChangePlayerAfterDead(this.currentPlayerInGame);
-
-                        SetStateGame(STATE_GAME.NEXT_ROUND);
-                        NextTurn(this.currentPlayerInGame);
+                    SetStateGame(STATE_GAME.NEXT_ROUND);
+                    NextTurn(this.currentPlayerInGame);
 
 
-                    }
-                    else if (currentUserInScene.GetComponent<PlayerCore>().GetLife() > 0)
-                    {
-                        Debug.Log("Player Alive - " + p.GetName() + " Seu ID: " + p.GetId() + " - MENSAGE LINE 261");
-                        SetStateGame(STATE_GAME.NEXT_ROUND);
-                        NextTurn(this.currentPlayerInGame);
-                    }
+                }
+                else if (currentUserInScene.GetComponent<PlayerCore>().GetLife() > 0)
+                {
+                    Debug.Log("Player Alive - " + p.GetName() + " Seu ID: " + p.GetId() + " - MENSAGE LINE 261");
+                    SetStateGame(STATE_GAME.NEXT_ROUND);
+                    NextTurn(this.currentPlayerInGame);
                 }
             }
+
 
         }
 
@@ -282,7 +282,6 @@ public class GameManager : SpawnPlayer
             {
                 indexToGo++;
                 Debug.Log("List size limit");
-                FinalTurn();
             }
             currentUserInScene = userList[indexToGo].GetUserObject();
         }
@@ -303,13 +302,23 @@ public class GameManager : SpawnPlayer
                     currentUser = userList[index].GetUserObject();
                 }
             }
+            if (index == userList.Count)
+            {
+                SetStateGame(STATE_GAME.END_ROUND);
+                FinalTurn();
+
+            }
             SetStateGame(STATE_GAME.START_TURN);
             InicializeRound(currentUser);
         }
     }
     public void FinalTurn()
     {
-
+        if (GetStateGame() == STATE_GAME.END_ROUND)
+        {
+            Debug.Log("FINAL TURN - NEED UPDATE GAME VARS");
+            Debug.Break();
+        }
     }
     // Update is called once per frame
     void Update()
