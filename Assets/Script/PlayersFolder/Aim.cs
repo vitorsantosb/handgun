@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class Aim : MonoBehaviour
 {
-    // Start is called before the first frame update
+    Camera mainCamera;
+    public float turnSpeed;
+   
     void Start()
     {
+        this.mainCamera = Camera.main;
         
     }
 
@@ -14,5 +17,10 @@ public class Aim : MonoBehaviour
     void Update()
     {
         
+    }
+    private void FixedUpdate()
+    {
+        float yawCamera = mainCamera.transform.rotation.eulerAngles.y;
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, yawCamera, 0), turnSpeed * Time.fixedDeltaTime);
     }
 }

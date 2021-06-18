@@ -14,6 +14,11 @@ public class GameState : MonoBehaviour
         CHECKING_DICES,
         SPAWNPLAYER,
         START_TURN,
+        FIRST_ROUND,
+        NEXT_ROUND,
+        END_ROUND,
+        UPDATE_GAME_VALUES,
+        CHECK_PLAYER_DOWN,
         REBOOTING, 
     }
 }
