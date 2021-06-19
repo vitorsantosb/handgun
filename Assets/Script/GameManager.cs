@@ -13,6 +13,8 @@ public class GameManager : SpawnPlayer
     [Header("Players")]
     public GameObject playerClone;
     public GameObject buttonClone;
+    public GameObject lifeBarClone;
+    public GameObject StaminaBarClone;
     public int playerCount;
 
     [Header("Arrays and Lists")]
@@ -21,9 +23,14 @@ public class GameManager : SpawnPlayer
     public Text[] UI_manager = new Text[0];
     private List<User> userList = new List<User>();
     public List<GameObject> buttonsList = new List<GameObject>();
+    public List<GameObject> lifeBarList = new List<GameObject>();
+    public List<GameObject> staminaBarList = new List<GameObject>();
     [Header("UI-Components")]
     public Text amountOfUsers;
+    public GameObject canvasWin;
+    public Text userWin;
     public GameObject uiRef;
+    public GameObject lifeBarRef;
     [Header("GameVars")]
     public bool isReady;
     private bool startGame;
@@ -52,7 +59,6 @@ public class GameManager : SpawnPlayer
     public void ReSizeList()
     {
         SetStateGame(STATE_GAME.INITIALIZING);
-        ConsolerClear.ClearLog();
         uiObj[0].SetActive(true);
         uiObj[1].SetActive(false);
         uiObj[2].SetActive(false);
@@ -62,6 +68,7 @@ public class GameManager : SpawnPlayer
         }
         buttonsList.Clear();
         userList.Clear();
+        lifeBarList.Clear();
     }
     public void ButtonEvent(InputField param)
     {
@@ -77,8 +84,15 @@ public class GameManager : SpawnPlayer
             for (int i = 0; i < playerCount; i++)
             {
                 GameObject button = Instantiate(buttonClone, new Vector3(uiRef.transform.position.x, uiRef.transform.position.y + (i * -80), 0), new Quaternion(0, 0, 0, 0));
+                GameObject playerLifeBar = Instantiate(lifeBarClone, new Vector3(lifeBarRef.transform.position.x, 0, 0), new Quaternion(0, 0, 0, 0));
+
                 button.transform.SetParent(uiRef.transform);
+                playerLifeBar.transform.SetParent(lifeBarRef.transform);
+
+                
                 buttonsList.Add(button);
+                lifeBarList.Add(playerLifeBar);
+                
                 userList.Add(new User("", 0, i + 1, playerClone));
             }
             SetStateGame(STATE_GAME.READY_TO_GO);
@@ -133,6 +147,7 @@ public class GameManager : SpawnPlayer
             for (int i = 0; i < userList.Count; i++)
             {
                 userList[i].SetName(buttonsList[i].GetComponent<buttonScript>().GetUserName());
+                //lifeBarList[i].tag = userList[i].GetName();
             }
             userList.Sort((a, b) => a.GetDice() < b.GetDice() ? 1 : -1);
             userList.ForEach(b => Debug.Log("Username: " + b.GetName() + " | " + "DICE RESULT: " + b.GetDice() + " | " + "ID: " + b.GetId() + " | " + b.GetUserObject()));
@@ -180,7 +195,6 @@ public class GameManager : SpawnPlayer
     {
         if (GetStateGame() == STATE_GAME.SPAWNPLAYER)
         {
-            ConsolerClear.ClearLog();
             SetupSpawn(userList);
 
             UpdateUserList();
@@ -217,7 +231,7 @@ public class GameManager : SpawnPlayer
         if (GetStateGame() == STATE_GAME.START_TURN)
         {
             startTurn = true;
-            this.turnTimer = 15;
+            this.turnTimer = 30;
             SetUserMove(_currentPlayer, true);
             TurnCount();
         }
@@ -298,8 +312,9 @@ public class GameManager : SpawnPlayer
         if (objUser == null) return;
         objUser.GetComponent<Aim>().enabled = active;
         objUser.GetComponent<Movement>().enabled = active;
-        objUser.transform.FindChild("cam").gameObject.SetActive(active);
-
+        //objUser.GetComponent<Shoot>().enabled = active;
+        //objUser.GetComponent<DrawProjection>().enabled = active;
+        objUser.transform.Find("cam").gameObject.SetActive(active);
 
     }
 
@@ -309,7 +324,7 @@ public class GameManager : SpawnPlayer
         if (GetStateGame() == STATE_GAME.NEXT_ROUND)
         {
             SetUserMove(currentUser, true);
-            turnTimer = 15;
+            turnTimer = 30;
 
             SetStateGame(STATE_GAME.START_TURN);
             InicializeRound(currentUser);
@@ -317,12 +332,9 @@ public class GameManager : SpawnPlayer
     }
     public void FinalTurn(User user)
     {
-        // user = winner
-        // show
-        //testa aqui;
-        // tu ta com 2 monitor? n
-        // ata k por isso não to vendo outro k
-
+        userWin.text = user.GetName();
+        CanvasList[1].SetActive(false);
+        canvasWin.SetActive(true);
         Debug.Log("Final Turn, winner: " + user.GetId() + " | " + user.GetName());
     }
     // Update is called once per frame
@@ -332,5 +344,5 @@ public class GameManager : SpawnPlayer
         TurnCount();
         AllButtonsReady();
     }
-    
+
 }

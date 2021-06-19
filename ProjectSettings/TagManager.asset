@@ -10,6 +10,8 @@ TagManager:
   - cuboNaCabeca
   - camSpine
   - cam
+  - lamps
+  - bullet
   layers:
   - Default
   - TransparentFX

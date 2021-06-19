@@ -11,7 +11,7 @@ public class Movement : MonoBehaviour
     void Awake()
     {
         this.rigidPlayer = GetComponent<Rigidbody>();
-        this.forceMult = 30;
+        this.forceMult = 10;
         this.animator = GetComponent<Animator>();
     }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System.Diagnostics;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -10,7 +11,7 @@ public class SceneManager : MonoBehaviour
     public void Menu()
     {
         //SceneManager.LoadScene("HomeMenu");
-        UnityEngine.SceneManagement.SceneManager.LoadScene("HomeMenu");
+        UnityEngine.SceneManagement.SceneManager.LoadScene("MenuNovo");
     }
     public void Options()
     {
@@ -18,17 +19,12 @@ public class SceneManager : MonoBehaviour
     }
     public void QuitGame()
     {
-        bool IsQuitGame = false;
-        QuitButton.SetActive(true);
-        if (IsQuitGame)
-        {
-            Application.Quit();
-        }
+        Application.Quit();
     }
     public void IngameScene()
     {
         //SceneManager.LoadScene("MapaBlocagem");
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Cena Teste");
+        UnityEngine.SceneManagement.SceneManager.LoadScene("MapScene");
     }
-    
+
 }

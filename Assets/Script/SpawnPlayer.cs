@@ -19,11 +19,11 @@ public class SpawnPlayer : EnumManager
 
     public Vector3 GetRandomLocation()
     {
-        int _x = 0;
+        int _x = 91;
         int _y = 10;
-        int _z = 0;
+        int _z = 142;
 
-        int raio = 120;
+        int raio = 200;
 
         int x = Random.Range(-raio, +raio);
         int z = Random.Range(-raio, +raio);
